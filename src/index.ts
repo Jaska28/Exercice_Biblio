@@ -1,5 +1,6 @@
 import prisma from "../utils/prisma.js";
 
+// CREATE
 async function seed() {
     const livres = await prisma.livre.createMany({
         data: [
@@ -37,6 +38,7 @@ async function seed() {
     });
 }
 
+// READ
 async function getTousLesLivres() {
     return prisma.livre.findMany();
 }
@@ -61,6 +63,7 @@ async function chercherParAuteur(motCle: string) {
     });
 }
 
+// UPDATE
 async function marquerIndisponible(id : number) {
     return prisma.livre.update({
         where: {id},
@@ -72,6 +75,19 @@ async function corrigerAnnee(id: number, nouvelleAnnee: number) {
     return prisma.livre.update({
         where: {id},
         data: {annee:nouvelleAnnee},
+    });
+}
+
+//DELETE
+async function supprimerLivre (id: number) {
+    return prisma.livre.delete({
+        where: {id},
+    });
+}
+
+async function supprimerAnciens(avantAnnee: number) {
+    return prisma.livre.deleteMany({
+        where: {annee: {lt: avantAnnee}}, // lt -> lower than ?
     });
 }
 
@@ -89,8 +105,11 @@ async function main() {
     //console.log("\n--- Recherche: saint ---");
     //console.log(await chercherParAuteur("saint"))
 
-    console.log(await marquerIndisponible(1));
-    console.log(await corrigerAnnee(2,2024));
+    //console.log(await marquerIndisponible(1));
+    //console.log(await corrigerAnnee(2,2024));
+
+    //console.log(await supprimerLivre(4));
+    //console.log(await supprimerAnciens(1940));
 
     await prisma.$disconnect();
 }
