@@ -91,6 +91,36 @@ async function supprimerAnciens(avantAnnee: number) {
     });
 }
 
+// BONUS - Emprunts
+async function emprunterLivre(livreId: number, parQui: string) {
+    const emprunt = await prisma.emprunt.create({
+        data: {livreId, empruntePar: parQui},
+    });
+    await prisma.livre.update({
+        where: {id: livreId},
+        data: {disponible: false},
+    });
+    return emprunt;
+}
+
+async function listerEmprunts() {
+    return prisma.emprunt.findMany({
+        include: {livre: true},
+    });
+}
+
+async function rendreLivre (empruntId: number) {
+    const emprunt = await prisma.emprunt.delete({
+        where: {id: empruntId},
+    });
+    await prisma.livre.update({
+        where: {id: emprunt.livreId},
+        data: {disponible: true},
+    });
+    return emprunt;
+}
+
+
 async function main() {
     //await seed();
     //console.log("\n--- Tous les livres ---");
@@ -110,6 +140,10 @@ async function main() {
 
     //console.log(await supprimerLivre(4));
     //console.log(await supprimerAnciens(1940));
+
+    console.log(await emprunterLivre(3,"Jean"));
+    console.log(await listerEmprunts());
+    console.log(await rendreLivre(3));
 
     await prisma.$disconnect();
 }
