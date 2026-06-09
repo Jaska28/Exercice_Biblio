@@ -10,12 +10,11 @@
     "@prisma/client": "^7.8.0",
     "dotenv": "^17.4.2"
   },
-
   "type": "module",
   "scripts": {
-  "dev":"tsx src/index.ts",
-  "db:migrate":"prisma migrate dev",
-  "db:studio": "prisma studio",
-  "db:generate":"prisma generate"
+    "dev": "tsx src/index.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
   }
 }

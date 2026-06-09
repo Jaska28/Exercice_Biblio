@@ -3,6 +3,7 @@
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
+// JAMAIS TOUCHER generator et datasource
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -10,4 +11,22 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model Livre {
+  id Int @id @default(autoincrement())
+  titre String
+  auteur String
+  annee Int
+  disponible Boolean @default(true)
+  createAt DateTime @default(now())
+  emprunts Emprunt[]
+}
+
+model Emprunt {
+  id Int @id @default(autoincrement())
+  livreId Int
+  empruntePar String
+  dateEmprunt DateTime @default(now())
+  livre Livre @relation(fields:[livreId], references: [id])
 }
